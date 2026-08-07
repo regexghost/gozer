@@ -101,7 +101,8 @@ Every template receives the following set of variables:
 Pages       # Slice of all pages in the site
 Posts       # Slice of all posts in the site (any page with a date in the filename or front matter)
 Site        # Global site properties: Url, Title
-Page        # The current page: Title, Permalink, UrlPath, DatePublished, DateModified
+Meta        # All keys from config.toml (for example: title, url, custom fields)
+Page        # The current page: Title, Permalink, UrlPath, DatePublished, DateModified, Meta
 Title       # The current page title, shorthand for Page.Title
 Content     # The current page's HTML content.
 Now         # Timestamp of build, instance of time.Time
