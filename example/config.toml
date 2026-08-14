@@ -4,3 +4,16 @@ title = "My website"
 key1 = 1
 key2 = "two"
 # key3 = 20250822T11:08:00Z
+
+[[feeds]]
+title = "My Feed"
+path = "content"
+filename = "feed.xml"
+favicon = "favicon.ico"
+length = 0 # Unlimited
+
+[[feeds]]
+title = "Just my blog"
+path = "content/blog" # Must be a sub-dir of content
+filename = "blog.xml"
+length = 10

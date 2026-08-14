@@ -95,7 +95,7 @@ Every template receives the following set of variables:
 
 ```
 Pages       # Slice of all pages in the site
-Posts       # Slice of all posts in the site (any page with a date in the filename)
+Posts       # Slice of all posts in the site (any page with a date in the filename or front matter)
 Site        # Global site properties: Url, Title
 Meta        # All keys from config.toml (for example: title, url, custom fields)
 Page        # The current page: Title, Permalink, UrlPath, DatePublished, DateModified, Meta
@@ -124,8 +124,8 @@ type Page struct {
     // Template this page uses for rendering. Defaults to "default.html".
     Template      string
 
-    // Time this page was published (parsed from file name).
-    DatePublished time.Time
+    // Time this page was published (parsed from file name or front matter).
+    DatePublished time.Time      `toml:"datepublished"`
 
     // Time this page was last modified on the filesystem.
     DateModified  time.Time
@@ -140,10 +140,10 @@ type Page struct {
     Filepath      string
 
     // Parsed front matter values, keyed by TOML key
-    Meta          map[string]any
+    Meta          map[string]any `toml:"-"`
 
     // Deprecated: use Meta.
-    Attrs         map[string]any
+    Attrs         map[string]any `toml:"-"`
 }
 ```
 
@@ -153,6 +153,57 @@ To show a list of the 5 most recent posts:
 {{ range (slice .Posts 0 5) }}
     <a href="{{ .Permalink }}">{{ .Title }}</a> <small>{{ .DatePublished.Format "Jan 02, 2006" }}</small><br />
 {{ end }}
+```
+
+## Config
+
+Options in `config.toml`:
+
+`url`: Website base URL
+
+`title`: Website title (used if no page title given)
+
+`feeds`:  
+```
+[[feeds]]
+title = "Blog"
+path = "content/"
+filename = "myfeed.xml"
+favicon = "favicon.png" # optional, relative to base URL
+length = 10 # 0 = no limit
+```
+
+## Functions
+
+`HasPrefix`: `HasPrefix *string* *prefix*`
+
+`HasSuffix`: `HasSuffix *string* *suffix*`
+
+`Contains`: `Contains *string* *sub_string*`
+
+`Replace`: `Replace *string* *target* *replacement* *number*` (`-1` for all)
+
+`GroupByDate`: `GroupByDate .Pages *date_string*` Example:  
+```
+{{ range GroupByDate .Pages "2006" }}
+	<h1>{{ .Key }}</h1>
+	{{ range .Pages }}
+		<h4>{{ .Title }}</h4>
+	{{ end }}
+{{ end }}
+```
+
+`Content`: `Content .` Example:  
+```
+{{ range .Pages }}
+	<h3>{{ .Title }}</h3>
+	{{ Content . }}
+{{ end }}
+```
+
+`AsTime`: `AsTime "*date_format*" *date_variable*` Example:  
+```
+{{ (AsTime "2006-01-02" .Attrs.MyCustomDate ).Format "2 Jan 2006" }}
 ```
 
 ## Contributing
