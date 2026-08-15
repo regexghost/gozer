@@ -7,7 +7,7 @@ key2 = "two"
 
 [[feeds]]
 title = "My Feed"
-path = "content"
+path = "content/"
 filename = "feed.xml"
 favicon = "favicon.ico"
 length = 0 # Unlimited
