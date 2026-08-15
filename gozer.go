@@ -482,6 +482,17 @@ func parseConfig(s *Site, file string) error {
 		fmt.Printf("Feed found: \"%s\"\n", s.Feeds[i].Filename);
 	}
 
+	if len(s.Feeds) == 0 {
+		fmt.Printf("No feed found, adding default feed\n")
+		defaultFeed := FeedDef {
+			Title: "My website",
+			Path: "content/",
+			Filename: "feed.xml",
+			Length: 0,
+		}
+		s.Feeds = append(s.Feeds, defaultFeed)
+	}
+
 	return nil
 }
 
